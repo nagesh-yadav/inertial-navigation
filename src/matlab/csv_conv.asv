@@ -1,0 +1,20 @@
+function [seqno timestamp accxyz gyroxyz]=csv_conv(filename,cal_offset)
+
+m=csvread(filename,1,2);
+seqno=m(:,1);
+timestamp=m(:,2);
+accxyz=m(:,3:5);
+gyroxyz=m(:,6:8);
+
+[ofx ofy ofz]= cal_offset(1,:);
+[sensx sensy sensz]= cal_offset(2,:);
+[ofgx ofgy ofgz]= cal_offset(3,:);
+[sensgx sensgy sensgz]= cal_offset(4,:);
+
+accxyz(:,1)=(accxyz(:,1)-ofx-2048)*sensx;
+accxyz(:,2)=(accxyz(:,2)-ofy-2048)*sensy;
+accxyz(:,3)=(accxyz(:,3)-ofz-2048)*sensz;
+
+gyroxyz(:,1)=(gyroxyz(:,1)-ofgx-2048)*sens;
+gyroxyz(:,2)=(gyroxyz(:,2)-ofgy-2048)*0.244141;
+gyroxyz(:,3)=(gyroxyz(:,3)-ofgz-2048)*0.244141;
